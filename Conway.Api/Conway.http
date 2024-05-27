@@ -1,0 +1,6 @@
+@Conway_HostAddress = http://localhost:5005
+
+GET {{Conway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
