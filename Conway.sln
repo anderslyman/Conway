@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conway.DB", "Conway.DB\Conw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conway.Test", "Conway.Test\Conway.Test.csproj", "{518CAC35-CE64-47DC-AE35-CE28EBFE8FCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conway.IntegrationTests", "Conway.IntegrationTests\Conway.IntegrationTests.csproj", "{8E535060-BCFB-47C9-B56C-B81A8A223726}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{518CAC35-CE64-47DC-AE35-CE28EBFE8FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{518CAC35-CE64-47DC-AE35-CE28EBFE8FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{518CAC35-CE64-47DC-AE35-CE28EBFE8FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E535060-BCFB-47C9-B56C-B81A8A223726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E535060-BCFB-47C9-B56C-B81A8A223726}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E535060-BCFB-47C9-B56C-B81A8A223726}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E535060-BCFB-47C9-B56C-B81A8A223726}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
