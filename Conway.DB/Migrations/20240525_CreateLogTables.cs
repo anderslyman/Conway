@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace Conway.Persistence.Migrations
 {
-    [Migration(202308251230)]
+    [Migration(202405252200)]
     public class CreateLogSchema : Migration
     {
         public override void Up()

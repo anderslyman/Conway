@@ -1,4 +1,6 @@
 using Anotar.Serilog;
+using Conway.Library;
+using Conway.Library.Configuration;
 using Conway.Library.Services;
 using Conway.Library.Settings;
 using Conway.Persistence;
@@ -9,9 +11,11 @@ using Serilog.Context;
 using Serilog.Events;
 using Serilog.Filters;
 using Serilog.Sinks.MSSqlServer;
+using Swashbuckle.AspNetCore.Filters;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Net;
+using System.Reflection;
 
 internal class Program
 {
@@ -79,6 +83,12 @@ internal class Program
                 ));
         });
 
+        /* Separation of models and dtos allows us to pick and choose which properties to expose to the client.
+         * e.g. The models should match what's in the database, while the dtos should match what the client expects.
+         * Automapper is a helpful library for that, cuts out a lot of boilerplate code.
+         */
+        builder.Services.AddSingleton(AutomapperSetup.SetupMappings().CreateMapper());
+
         /* TODO: write a dispatch proxy that can measure performance when requested.
          *  This is handy in production scenarios where you want to measure the performance of all the underlying service calls.
          *  Sometimes replicating a performance issue is really difficult in a developer env, so appending an "Audit: true" header
@@ -95,12 +105,23 @@ internal class Program
          * Additionally, we can easily test the SQL queries in a test environment - we can check that they compile,
          *   and we can exercise them in some simple ways to ensure they return/manipulate data correctly.
          */
-        builder.Services.AddScoped<IDatabaseService, DatabaseService>(sp => new DatabaseService(GlobalHosting.ConnectionString));
+        builder.Services.AddScoped<IDatabaseService, DatabaseService>(sp => new DatabaseService(GlobalHosting.ConnectionString)); // TODO: inject user when auth is implemented
+        builder.Services.AddScoped<IConwayGame, ConwayGame>();
+        builder.Services.AddScoped<IConwayService, ConwayService>();
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddNewtonsoftJson(o =>
+        {
+            o.SerializerSettings.Converters.Add(new BoolToBitJsonConverter());
+        });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+        });
+        builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
 
         var app = builder.Build();
 
@@ -249,11 +270,14 @@ internal class Program
             configurationMessages.Add($" > Logging: {logSetting.Key} = {logSetting.Value}");
         }
 
-        configurationMessages.Add(string.Empty);
-
-        foreach (var featureFlag in GlobalHosting.AppSettings.Features)
+        if (GlobalHosting.AppSettings.Features != null)
         {
-            configurationMessages.Add($" > Feature Flag: {featureFlag.Key} = {featureFlag.Value}");
+            configurationMessages.Add(string.Empty);
+
+            foreach (var featureFlag in GlobalHosting.AppSettings.Features)
+            {
+                configurationMessages.Add($" > Feature Flag: {featureFlag.Key} = {featureFlag.Value}");
+            }
         }
 
         configurationMessages.Add(string.Empty);

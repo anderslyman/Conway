@@ -20,7 +20,7 @@ namespace Conway.Persistence
             }
             catch
             {
-                // TODO: log an issue and wrap exception in a custom exception
+                // TODO: log an issue throw custom exception
                 throw;
             }
         }
@@ -38,7 +38,7 @@ namespace Conway.Persistence
             }
             catch
             {
-                // TODO: log an issue and wrap exception in a custom exception
+                // TODO: log an issue throw custom exception
                 throw;
             }
         }
@@ -56,7 +56,7 @@ namespace Conway.Persistence
             }
             catch
             {
-                // TODO: log an issue and wrap exception in a custom exception
+                // TODO: log an issue throw custom exception
                 throw;
             }
         }

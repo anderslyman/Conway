@@ -13,8 +13,6 @@ namespace Conway.Library.Services
 {
     public interface IDatabaseService
     {
-        IDbConnection DatabaseConnection();
-
         /// <summary>
         /// Executes arbitrary SQL. Updates, Inserts, etc.
         /// </summary>
